@@ -8,16 +8,6 @@ resource_endpoint = '/api/unknown'
 register_endpoint = '/api/register'
 login_endpoint = '/api/login'
 
-from flask import Flask, render_template, request
-import requests
-app = Flask(__name__)
-
-base_url = 'https://reqres.in'
-user_endpoint = '/api/users'
-resource_endpoint = '/api/unknown'
-register_endpoint = '/api/register'
-login_endpoint = '/api/login'
-
 @app.route('/')
 def home():
     return render_template('index.html', local_url=request.base_url)
