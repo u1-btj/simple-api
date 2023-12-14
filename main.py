@@ -1,20 +1,3 @@
-from flask import Flask, jsonify, request
-import requests
-app = Flask(__name__)
-
-base_url = 'https://reqres.in'
-user_endpoint = '/api/users'
-resource_endpoint = '/api/unknown'
-
-'''
-Ivan -> Single User
-Devina -> Get Single Resource
-Pingky -> List User
-Safira -> Delete User
-Faiz -> Update User Put
-Yuma -> Get List Resource
-'''
-
 from flask import Flask, render_template, request
 import requests
 app = Flask(__name__)
@@ -55,6 +38,13 @@ def list_users():
    response = requests.request("GET", f'{base_url}{user_endpoint}')
    return response.json()
 
+# Ivander
+@app.route('/users/<string:uid>', methods = ["GET"])
+def get_single_user(uid):
+   # url = ("https://reqres.in/api/users/" + uid)
+   response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
+   return response.json()
+
 # Safira
 @app.route('/delete', methods=['DELETE'])
 def delete():
@@ -62,4 +52,4 @@ def delete():
    return response.text, response.status_code
 
 if __name__ == '__main__':
-   app.run()
+    app.run()
