@@ -1,19 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jrender_template, request
 import requests
 app = Flask(__name__)
 
 base_url = 'https://reqres.in'
 user_endpoint = '/api/users'
 resource_endpoint = '/api/unknown'
-
-'''
-Ivan -> Single User
-Devina -> Get Single Resource
-Pingky -> List User
-Safira -> Delete User
-Faiz -> Update User Put
-Yuma -> Get List Resource
-'''
+register_endpoint = '/api/register'
+login_endpoint = '/api/login'
 
 from flask import Flask, render_template, request
 import requests
