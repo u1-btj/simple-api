@@ -38,5 +38,12 @@ def list_users():
    response = requests.request("GET", f'{base_url}{user_endpoint}')
    return response.json()
 
+# Ivander
+@app.route('/users/<string:uid>', methods = ["GET"])
+def get_single_user(uid):
+   # url = ("https://reqres.in/api/users/" + uid)
+   response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
+   return response.json()
+
 if __name__ == '__main__':
     app.run()
