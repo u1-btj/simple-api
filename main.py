@@ -20,35 +20,35 @@ def register():
     return response.json(), response.status_code
 
 # Faiz
-@app.route('/update', methods = ['PUT'])
+@app.route('/update', methods=['PUT'])
 def update():
-   payload = request.get_json()
-   response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
-   return response.json(), response.status_code
-  
+    payload = request.get_json()
+    response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
+    return response.json(), response.status_code
+
 # Devina
 @app.route('/resource', methods=["GET"])
 def get_single_resource():
-   response = requests.request("GET", f'{base_url}{resource_endpoint}/2')
-   return response.json()
+    response = requests.request("GET", f'{base_url}{resource_endpoint}/2')
+    return response.json()
 
 # Pingky
 @app.route('/users', methods=['GET'])
 def list_users():
-   response = requests.request("GET", f'{base_url}{user_endpoint}')
-   return response.json()
+    response = requests.request("GET", f'{base_url}{user_endpoint}')
+    return response.json()
 
 # Ivander
-@app.route('/users/<string:uid>', methods = ["GET"])
+@app.route('/users/<string:uid>', methods=["GET"])
 def get_single_user(uid):
-   response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
-   return response.json()
+    response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
+    return response.json()
 
 # Safira
 @app.route('/delete', methods=['DELETE'])
 def delete():
-   response = requests.request('DELETE', f'{base_url}{user_endpoint}/2')
-   return response.text, response.status_code
+    response = requests.request('DELETE', f'{base_url}{user_endpoint}/2')
+    return response.text, response.status_code
 
 if __name__ == '__main__':
-   app.run()
+    app.run()
