@@ -24,5 +24,12 @@ def register():
     response = requests.request("POST", f'{base_url}{register_endpoint}', data=payload)
     return response.json(), response.status_code
 
+# Faiz
+@app.route('/update', methods = ['PUT'])
+def update():
+   payload = request.get_json()
+   response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
+   return response.json(), response.status_code
+
 if __name__ == '__main__':
     app.run()
