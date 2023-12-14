@@ -8,7 +8,6 @@ resource_endpoint = '/api/unknown'
 register_endpoint = '/api/register'
 login_endpoint = '/api/login'
 
-
 @app.route('/')
 def home():
     return render_template('index.html', local_url=request.base_url)
@@ -27,10 +26,16 @@ def update():
    response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
    return response.json(), response.status_code
   
-#Devina
+# Devina
 @app.route('/resource', methods=["GET"])
 def get_single_resource():
    response = requests.request("GET", f'{base_url}{resource_endpoint}/2')
+   return response.json()
+
+# Pingky
+@app.route('/users', methods=['GET'])
+def list_users():
+   response = requests.request("GET", f'{base_url}{user_endpoint}')
    return response.json()
 
 if __name__ == '__main__':
