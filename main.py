@@ -10,12 +10,19 @@ login_endpoint = '/api/login'
 
 @app.route('/')
 def home():
-   return render_template('index.html', local_url=request.base_url)
+    return render_template('index.html', local_url=request.base_url)
 
 # @app.route('/test')
 # def test():
-#    response = requests.request("GET", f'{base_url}{user_endpoint}/2')
-#    return response.json()
+#     response = requests.request("GET", f'{base_url}{user_endpoint}/2')
+#     return response.json()
+
+# Yuma
+@app.route('/register', methods=['POST'])
+def register():
+    payload = request.get_json()
+    response = requests.request("POST", f'{base_url}{register_endpoint}', data=payload)
+    return response.json(), response.status_code
 
 if __name__ == '__main__':
-   app.run()
+    app.run()
