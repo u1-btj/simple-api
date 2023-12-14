@@ -5,6 +5,8 @@ app = Flask(__name__)
 base_url = 'https://reqres.in'
 user_endpoint = '/api/users'
 resource_endpoint = '/api/unknown'
+register_endpoint = '/api/register'
+login_endpoint = '/api/login'
 
 @app.route('/')
 def home():
