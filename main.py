@@ -44,5 +44,11 @@ def get_single_user(uid):
    response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
    return response.json()
 
+# Safira
+@app.route('/delete', methods=['DELETE'])
+def delete():
+   response = requests.request('DELETE', f'{base_url}{user_endpoint}/2')
+   return response.text, response.status_code
+
 if __name__ == '__main__':
-    app.run()
+   app.run()
