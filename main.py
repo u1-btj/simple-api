@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request
 import requests
 app = Flask(__name__)
@@ -8,6 +7,7 @@ user_endpoint = '/api/users'
 resource_endpoint = '/api/unknown'
 register_endpoint = '/api/register'
 login_endpoint = '/api/login'
+
 
 @app.route('/')
 def home():
@@ -20,6 +20,13 @@ def register():
     response = requests.request("POST", f'{base_url}{register_endpoint}', data=payload)
     return response.json(), response.status_code
 
+# Faiz
+@app.route('/update', methods = ['PUT'])
+def update():
+   payload = request.get_json()
+   response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
+   return response.json(), response.status_code
+  
 #Devina
 @app.route('/resource', methods=["GET"])
 def get_single_resource():
@@ -27,4 +34,4 @@ def get_single_resource():
    return response.json()
 
 if __name__ == '__main__':
-   app.run()
+    app.run()
