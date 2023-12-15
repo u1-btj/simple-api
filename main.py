@@ -28,9 +28,9 @@ def update(uid):
 
 # Devina
 @app.route('/resource', methods=["GET"])
-def get_single_resource():
-    response = requests.request("GET", f'{base_url}{resource_endpoint}/2')
-    return response.json()
+def get_single_resource(uid):
+    response = requests.request("GET", f'{base_url}{resource_endpoint}/{uid}')
+
 
 # Pingky
 @app.route('/users', methods=['GET'])
