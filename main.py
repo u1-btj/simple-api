@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import psycopg2
 import requests
+from datetime import datetime
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -34,11 +35,37 @@ def register():
     return response.json(), response.status_code
 
 # Faiz
-@app.route('/update/<string:uid>', methods=['PUT'])
+@app.route('/users/<string:uid>', methods=['PUT'])
 def update(uid):
-    payload = request.get_json()
-    response = requests.request("PUT", f'{base_url}{user_endpoint}/{uid}', data=payload)
-    return response.json(), response.status_code
+    data = request.get_json() # ambil data dari body yang diberikan
+    cur.execute("SELECT * FROM users WHERE user_id = " + uid)
+    existing_user = cur.fetchone()
+
+    # jika existing_user ada, maka update value sesuai user_id
+    if existing_user:
+        # request PUT data harus utuh, jika tidak, maka tampilkan attributes yang tidak ada
+        fields = ['email', 'firstname', 'lastname', 'avatar', 'token_user']
+        missing = [x for x in fields if x not in data]
+        if missing:
+            return jsonify({'error': f'Missing attributes: {", ".join(missing)}'}), 400
+        # lakukan update sesuai dengan field body request yang diisi
+        cur.execute("UPDATE users SET email = %s, firstname = %s, lastname = %s, avatar = %s, token_user = %s WHERE user_id = %s",
+                    (data.get('email'), data.get('firstname'), data.get('lastname'), data.get('avatar'), data.get('token_user'), 
+                    uid))
+    # jika tidak ada, maka tampilkan error
+    else:
+        return jsonify({"error":"user does not exist"}), 404
+
+    waktu = str(datetime.now()) # simpan timestamp update
+    # mengambil nilai yang sudah di update sebelumnya
+    cur.execute("SELECT * FROM users WHERE user_id = " + uid)
+    updated_user = cur.fetchone()
+    # pasangkan nilai dengan nama attribut/kolomnya
+    attr = ['user_id', 'email', 'firstname', 'lastname', 'avatar', 'token_user']
+    updated_dict = dict(zip(attr, updated_user)) 
+
+    conn.commit() # commit perubahan pada database
+    return jsonify({"updated":updated_dict, "updatedAt":waktu}), 200 # tampilkan data yang sudah di update dan timestamp nya
 
 # Devina
 @app.route('/resource/<string:rid>', methods=["GET"])
