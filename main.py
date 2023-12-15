@@ -20,10 +20,10 @@ def register():
     return response.json(), response.status_code
 
 # Faiz
-@app.route('/update', methods=['PUT'])
-def update():
+@app.route('/update/<string:uid>', methods=['PUT'])
+def update(uid):
     payload = request.get_json()
-    response = requests.request("PUT", f'{base_url}{user_endpoint}/2', data=payload)
+    response = requests.request("PUT", f'{base_url}{user_endpoint}/{uid}', data=payload)
     return response.json(), response.status_code
 
 # Devina
