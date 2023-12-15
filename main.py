@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request
 import requests
 app = Flask(__name__)
@@ -20,11 +19,36 @@ def register():
     response = requests.request("POST", f'{base_url}{register_endpoint}', data=payload)
     return response.json(), response.status_code
 
-#Devina
+# Faiz
+@app.route('/update/<string:uid>', methods=['PUT'])
+def update(uid):
+    payload = request.get_json()
+    response = requests.request("PUT", f'{base_url}{user_endpoint}/{uid}', data=payload)
+    return response.json(), response.status_code
+
+# Devina
 @app.route('/resource', methods=["GET"])
-def get_single_resource():
-   response = requests.request("GET", f'{base_url}{resource_endpoint}/2')
-   return response.json()
+def get_single_resource(uid):
+    response = requests.request("GET", f'{base_url}{resource_endpoint}/{uid}')
+    return response.json()
+
+# Pingky
+@app.route('/users', methods=['GET'])
+def list_users():
+    response = requests.request("GET", f'{base_url}{user_endpoint}')
+    return response.json()
+
+# Ivander
+@app.route('/users/<string:uid>', methods=["GET"])
+def get_single_user(uid):
+    response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}')
+    return response.json()
+
+# Safira
+@app.route('/delete', methods=['DELETE'])
+def delete():
+    response = requests.request('DELETE', f'{base_url}{user_endpoint}/2')
+    return response.text, response.status_code
 
 if __name__ == '__main__':
-   app.run()
+    app.run()
