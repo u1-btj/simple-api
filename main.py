@@ -70,8 +70,15 @@ def update(uid):
 # Devina
 @app.route('/resource/<string:rid>', methods=["GET"])
 def get_single_resource(rid):
-    response = requests.request("GET", f'{base_url}{resource_endpoint}/{rid}')
-    return response.json()
+    cur.execute('select * from simple_api.public.resource where resource_id = ' + rid)
+    resource = cur.fetchone()
+    key_resource = ['id','name','year','color','pantone_value']
+    #jika resource_id tidak ada di database, return error status code 404
+    if(resource == None):
+        return {'error': 'not found'}, 404
+    else:
+        resource = dict(zip(key_resource, resource))
+        return jsonify(resource), 200
 
 # Pingky
 @app.route('/users', methods=['GET'])
