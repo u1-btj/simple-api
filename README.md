@@ -15,3 +15,17 @@
 ## Run flask app in local
 
     python main.py
+    
+## Create and setup database
+run simple_api.sql
+
+## Connect to database
+
+Create connection to database:
+
+    conn = psycopg2.connect(
+    host='localhost',
+    user='postgres',
+    password='postgres',
+    database='simple_api'
+    )
