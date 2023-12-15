@@ -41,7 +41,7 @@ def list_users():
 # Ivander
 @app.route('/users/<string:uid>', methods=["GET"])
 def get_single_user(uid):
-    response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}', headers={}, data={})
+    response = requests.request("GET", f'{base_url}{user_endpoint}/{uid}')
     return response.json()
 
 # Safira
