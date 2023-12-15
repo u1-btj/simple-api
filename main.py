@@ -30,7 +30,7 @@ def update(uid):
 @app.route('/resource', methods=["GET"])
 def get_single_resource(uid):
     response = requests.request("GET", f'{base_url}{resource_endpoint}/{uid}')
-    return response.json()
+
 
 # Pingky
 @app.route('/users', methods=['GET'])
