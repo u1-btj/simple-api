@@ -128,10 +128,63 @@ def get_single_user(uid):
         return user_json
 
 # Safira
-@app.route('/delete', methods=['DELETE'])
-def delete():
-    response = requests.request('DELETE', f'{base_url}{user_endpoint}/2')
-    return response.text, response.status_code
+# Untuk delete sebagian user
+@app.route('/delete/users/<string:uid>', methods=["DELETE"])
+def delete_user(uid):
+    delete_query = 'DELETE FROM simple_api.public.users WHERE user_id = ' + uid
+    cur.execute(delete_query)
+    conn.commit()
+    # Dapatkan jumlah baris yang terpengaruh oleh operasi DELETE
+    deleted_rows = cur.rowcount
+
+    # Jika tidak ada baris yang terpengaruh, berarti user tidak ditemukan
+    if deleted_rows == 0:
+        response = {'error': 'User not found'}
+        return jsonify(response), 404
+    else:
+        return jsonify({}), 204
+    
+# Untuk delete semua user
+@app.route('/delete/all_users', methods=["DELETE"])
+def delete_all_users():
+    # query hapus semua user
+    delete_all_query = 'DELETE FROM simple_api.public.users'
+    cur.execute(delete_all_query)
+
+    # Lakukan commit ke database
+    conn.commit()
+
+    return jsonify({}), 204
+
+# Untuk delete sebagian resource
+@app.route('/delete/resource/<string:uid>', methods=["DELETE"])
+def delete_resources(uid):
+    delete_query = 'DELETE FROM simple_api.public.resource WHERE resource_id = ' + uid
+    cur.execute(delete_query)
+    conn.commit()
+
+    # Dapatkan jumlah baris yang terpengaruh oleh DELETE
+    deleted_rows = cur.rowcount
+
+    # Jika tidak ada baris yang terpengaruh, berarti resource tidak ditemukan
+    if deleted_rows == 0:
+        response = {'error': 'Resource not found'}
+        return jsonify(response), 404
+    else:
+        return jsonify({}), 204
+
+# Untuk delete semua resources
+@app.route('/delete/all_resource', methods=["DELETE"])
+def delete_all_resources():
+    
+    # query hapus semua resource
+    delete_all_query = 'DELETE FROM simple_api.public.resource'
+    cur.execute(delete_all_query)
+
+    # Lakukan commit ke database
+    conn.commit()
+
+    return jsonify({}), 204
 
 if __name__ == '__main__':
     app.run(debug=True)
