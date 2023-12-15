@@ -76,8 +76,28 @@ def get_single_resource(rid):
 # Pingky
 @app.route('/users', methods=['GET'])
 def list_users():
-    response = requests.request("GET", f'{base_url}{user_endpoint}')
-    return response.json()
+    # kueri SQL untuk mengambil seluruh data users
+    user_query = 'SELECT * FROM simple_api.public.users'
+    cur.execute(user_query)
+
+    # mengambil semua baris hasil dari eksekusi kueri
+    all_users = cur.fetchall()
+
+    # mengubah hasilnya menjadi list of dictionaries
+    users_list = []
+    for user in all_users:
+        user_dict = {
+            'id': user[0],
+            'email': user[1],
+            'first_name': user[2],
+            'last_name': user[3],
+            'avatar': user[4],
+        }
+        users_list.append(user_dict)
+
+    # mengonversi ke format JSON
+    user_json = jsonify(users_list)
+    return user_json
 
 # Ivander
 @app.route('/users/<string:uid>', methods=["GET"])
