@@ -176,7 +176,6 @@ def delete_resources(uid):
 # Untuk delete semua resources
 @app.route('/delete/all_resource', methods=["DELETE"])
 def delete_all_resources():
-    
     # query hapus semua resource
     delete_all_query = 'DELETE FROM simple_api.public.resource'
     cur.execute(delete_all_query)
