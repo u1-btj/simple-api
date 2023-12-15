@@ -27,10 +27,10 @@ def update(uid):
     return response.json(), response.status_code
 
 # Devina
-@app.route('/resource', methods=["GET"])
-def get_single_resource(uid):
-    response = requests.request("GET", f'{base_url}{resource_endpoint}/{uid}')
-
+@app.route('/resource/<string:rid>', methods=["GET"])
+def get_single_resource(rid):
+    response = requests.request("GET", f'{base_url}{resource_endpoint}/{rid}')
+    return response.json()
 
 # Pingky
 @app.route('/users', methods=['GET'])
