@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import psycopg2
 import requests
 from datetime import datetime
+import random
+import string
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -30,9 +32,53 @@ def home():
 # Yuma
 @app.route('/register', methods=['POST'])
 def register():
-    payload = request.get_json()
-    response = requests.request("POST", f'{base_url}{register_endpoint}', data=payload)
-    return response.json(), response.status_code
+    json_request = request.get_json(force=True, silent=True)
+    # Validasi request berupa json dan json body tidak empty
+    if not bool(json_request):
+        return jsonify({"error" : "JSON body cannot be empty"}), 400
+    # Validasi email pada body json dan email value tidak empty
+    if 'email' not in json_request.keys() or not bool(json_request['email']):
+        return jsonify({"error" : "Missing email or username"}), 400
+    # Validasi password pada body json dan password value tidak empty
+    if 'password' not in json_request.keys() or not bool(json_request['password']):
+        return jsonify({"error" : "Missing password"}), 400
+    
+    # Di reqres API, hanya bisa melakukan register dengan user yang sudah ada
+    # Menambahkan fitur create user ke database
+    sample = string.ascii_letters + string.digits
+    # Generate random token
+    token = ''.join((random.choice(sample) for i in range(15)))
+    # Asumsi email pasti dalam bentuk [john.doe@email.com]
+    full_name = json_request['email'].split('@')[0].split('.')
+    first_name = full_name[0].capitalize()
+    last_name = full_name[1].capitalize()
+    cur.execute(f"INSERT INTO users (email, firstname, lastname, token_user) VALUES ('{json_request['email']}', '{first_name}', '{last_name}', '{token}')")
+    cur.execute(f"SELECT * FROM users WHERE email = '{json_request['email']}'")
+    user = cur.fetchone()
+    conn.commit()
+    if user:
+        return jsonify({"id": user[0], "token": user[5]})
+    return jsonify({"error": "Something went wrong"}), 500 
+
+@app.route('/login', methods=['POST'])
+def login():
+    json_request = request.get_json(force=True, silent=True)
+    # Validasi request berupa json dan json body tidak empty
+    if not bool(json_request):
+        return jsonify({"error" : "JSON body cannot be empty"}), 400
+    # Validasi email pada body json dan email value tidak empty
+    if 'email' not in json_request.keys() or not bool(json_request['email']):
+        return jsonify({"error" : "Missing email or username"}), 400
+    # Validasi password pada body json dan password value tidak empty
+    if 'password' not in json_request.keys() or not bool(json_request['password']):
+        return jsonify({"error" : "Missing password"}), 400
+    
+    # Sama seperti reqres API, password tidak divalidasi (selama value tidak empty), dan hanya melakukan validasi email
+    cur.execute(f"SELECT token_user FROM users WHERE email = '{json_request['email']}'")
+    token_user = cur.fetchone()
+    if token_user:
+        return jsonify({"token": token_user[0]})
+    return jsonify({"error": "User not found"}), 400  
 
 # Faiz
 @app.route('/users/<string:uid>', methods=['PUT'])
