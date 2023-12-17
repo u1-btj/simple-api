@@ -27,7 +27,7 @@ If virtualenv not installed, follow this link for installation : [venv installat
 
 ### Install required module on requirements.txt
 
-    pip install requirements.txt
+    pip install -r requirements.txt
 
 ## Create and setup database
 Execute sql script on **simple_api.sql**
